@@ -41,11 +41,11 @@ func (u *UserService) SendToken(email string) error {
 
 	// Проверка обязательных параметров
 	if from == "" || smtpPass == "" || smtpUser == "" || smtpHost == "" || smtpPort == "" {
-		return fmt.Errorf("missing required SMTP configuration")
+		return fmt.Errorf("пропущены параметры для smtp")
 	}
 	token := uuid.New().String()
 	subject := "Confirm Your Email"
-	htmlBody := fmt.Sprintf("<h1>Welcome!</h1><p>Your token</p><p>%s</p>", token)
+	htmlBody := fmt.Sprintf("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Подтвердите свой почтовый адрес</title>\n</head>\n<body style=\"font-family: Arial, sans-serif;\">\n<div style=\"max-width: 600px; margin: 0 auto; padding: 20px;\">\n  <h1 style=\"text-align: center; color: #333;\">Подтвердите свой почтовый адрес</h1>\n  <p style=\"margin-bottom: 20px;\">Если вы не создавали аккаунт на сайте SuperMegaWorker.com\n                    проигнорируйте данное сообщение или удалите его. Код подтверждения:</p>\n  <p  style=\"display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;\">%s</p>\n</div>\n</body>\n</html>", token)
 	// Создание сообщения
 	m := gomail.NewMessage()
 	m.SetHeader("From", from)
@@ -65,6 +65,9 @@ func (u *UserService) SendToken(email string) error {
 	if err := dialer.DialAndSend(m); err != nil {
 		return fmt.Errorf("failed to send email: %v", err)
 	}
-	u.repo.UpdateToken(token, email)
+	err = u.repo.UpdateToken(token, email)
+	if err != nil {
+		return fmt.Errorf("Ошибка обновления данных о токене")
+	}
 	return nil
 }

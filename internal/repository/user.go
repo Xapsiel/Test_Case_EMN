@@ -35,7 +35,7 @@ func (p *UserPostgres) UpdateToken(token, email string) error {
 	query := "INSERT INTO email_tokens (email, token, expires_at,created_at) VALUES ($1, $2, current_timestamp+interval '5 hours', current_timestamp) on conflict (email) do update  set token=$3, expires_at=current_timestamp+interval '5 hours', created_at=current_timestamp"
 	_, err := p.db.Exec(query, email, token, token)
 	if err != nil {
-		return fmt.Errorf("Ошибка создания или обновления токена: %v", err)
+		return fmt.Errorf("Ошибка создания или обновления токена")
 	}
 	return nil
 }
@@ -46,9 +46,9 @@ func (p *UserPostgres) VerifyToken(token string) error {
 	err := p.db.QueryRow(query, token).Scan(&email, &expires_at)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return fmt.Errorf("токен не найден или уже использован")
+			return fmt.Errorf("Токен не найден")
 		}
-		return fmt.Errorf("ошибка проверки токена: %v", err)
+		return fmt.Errorf("Ошибка проверки токена")
 	}
 	if time.Now().After(expires_at) {
 		return fmt.Errorf("Время действия токена истекло")
@@ -56,16 +56,13 @@ func (p *UserPostgres) VerifyToken(token string) error {
 	query = "UPDATE users SET verified = true WHERE email = $1"
 	_, err = p.db.Exec(query, email)
 	if err != nil {
-		return fmt.Errorf("ошибка обновления статуса пользователя: %v", err)
+		return fmt.Errorf("Ошибка обновления статуса пользователя: %v", err)
 	}
 	query = "DELETE FROM email_tokens WHERE token = $1"
 	_, err = p.db.Exec(query, token)
 	if err != nil {
-		return fmt.Errorf("ошибка удаления токена: %v", err)
+		return fmt.Errorf("Ошибка удаления токена")
 	}
 
 	return nil
 }
-
-//func (p *UserPostgres) Verify(token string)
-///
