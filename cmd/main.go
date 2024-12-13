@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"log"
 	"mobileTest_Case/internal/handler"
 	"mobileTest_Case/internal/models"
 	"mobileTest_Case/internal/repository"
@@ -13,13 +13,13 @@ import (
 
 func main() {
 	if err := initConfig(); err != nil {
-		log.Println("Err")
+		logrus.Warn("Ошибка инициализации переменных конфигурации")
 	}
 	if err := godotenv.Load(); err != nil {
-		log.Println("Error loading .env file")
+		logrus.Warn("Ошибка инициализации переменных окружения")
 	}
 	db, err := repository.NewPostgresDB(repository.Config{
-		Host:     viper.GetString("db.host"),
+		Host:     os.Getenv("DB_HOST"),
 		Port:     viper.GetString("db.port"),
 		Username: viper.GetString("db.username"),
 		Password: os.Getenv("DB_PASSWORD"),
@@ -27,16 +27,19 @@ func main() {
 		SSLMode:  viper.GetString("db.sslmode"),
 	})
 	if err != nil {
-		log.Println(err)
+		logrus.Warn(err.Error())
 	}
 	repos := repository.NewRepository(db)
+	logrus.Info("Определение переменной бд")
 	services := service.NewService(repos)
+	logrus.Info("Определение переменной сервисов")
 	handlers := handler.NewHandler(services)
-
+	logrus.Info("Определение маршрутов")
 	srv := new(models.Server)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
-		log.Println(err.Error())
+		logrus.Warn(err.Error())
 	}
+	logrus.Info("Запущен сервер на порту :" + viper.GetString("port"))
 
 }
 

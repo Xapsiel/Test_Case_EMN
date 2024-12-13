@@ -18,7 +18,7 @@ func NewUserPostgres(db *sqlx.DB) *UserPostgres {
 }
 func (p *UserPostgres) Register(nickname, name, email string) error {
 	var existingUser models.User
-	query := "SELECT * FROM users WHERE email = $2"
+	query := "SELECT * FROM users WHERE email = $1"
 	err := p.db.Get(&existingUser, query, email)
 
 	if err == nil {
@@ -36,6 +36,14 @@ func (p *UserPostgres) UpdateToken(token, email string) error {
 	_, err := p.db.Exec(query, email, token, token)
 	if err != nil {
 		return fmt.Errorf("Ошибка создания или обновления токена")
+	}
+	return nil
+}
+func (p *UserPostgres) Delete(email string) error {
+	query := "DELETE FROM users where email=$1"
+	_, err := p.db.Exec(query, email)
+	if err != nil {
+		return fmt.Errorf("Ошибка удаления пользователя")
 	}
 	return nil
 }

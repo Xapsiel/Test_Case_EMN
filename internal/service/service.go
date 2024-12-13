@@ -6,6 +6,7 @@ type User interface {
 	Register(nickname, name, email string) error
 	VerifyEmail(token string) error
 	SendToken(email string) error
+	Delete(email string) error
 }
 
 type Service struct {

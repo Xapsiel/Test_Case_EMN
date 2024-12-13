@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "15b08881-d9b9-426b-bfd3-3982cb7772b6",
+		"name": "TestCase",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32841070"
+	},
+	"item": [
+		{
+			"name": "Register New User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"WorkMail@gmail.com\",\r\n    \"name\":\"Ilyas\",\r\n    \"nickname\":\"Juniorchik\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Old User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"WorkMail@gmail.com\",\r\n    \"name\":\"Ilyas\",\r\n    \"nickname\":\"Juniorchik\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register incorrect format email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"WorkMail\",\r\n    \"name\":\"Ilyas\",\r\n    \"nickname\":\"Juniorchik\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register incorrect format body",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"WorkMail\",\r\n    \"name\":\"Ilyas\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify user account",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/verify?token=52fdfc07-2182-454f-963f-5f0f9a621d72",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"verify"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "52fdfc07-2182-454f-963f-5f0f9a621d72"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try verify user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/verify?token=52fdfc07-2182-454f-963f-5f0f9a621d72",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"verify"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "52fdfc07-2182-454f-963f-5f0f9a621d72"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

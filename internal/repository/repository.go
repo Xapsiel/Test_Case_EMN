@@ -6,6 +6,7 @@ type User interface {
 	Register(nickname, name, email string) error
 	UpdateToken(token, email string) error
 	VerifyToken(token string) error
+	Delete(email string) error
 }
 
 func NewRepository(db *sqlx.DB) *Repository {

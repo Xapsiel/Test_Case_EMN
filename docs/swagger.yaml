@@ -1,0 +1,80 @@
+definitions:
+  handler.Response:
+    properties:
+      text:
+        example: Аккаунт подтвержден
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      nickname:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Добавление новой песни в базу данных(Обязательные параметры - song,group)
+      parameters:
+      - description: Данные человека
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Регистрация человека
+      tags:
+      - users
+  /verify:
+    get:
+      consumes:
+      - application/json
+      description: Подтверждает почту кодом, присланным на почту
+      parameters:
+      - description: Код подтверждения
+        in: query
+        name: token
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Подтверждение почты
+      tags:
+      - users
+swagger: "2.0"
